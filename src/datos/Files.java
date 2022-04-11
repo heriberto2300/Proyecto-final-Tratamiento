@@ -21,7 +21,7 @@ public class Files {
             }
             bufferedReader.close();
             return datos;
-        } catch (IOException err) {}
+        } catch (IOException err) {err.printStackTrace();}
         return null;
     }
 }
