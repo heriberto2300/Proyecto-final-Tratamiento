@@ -14,6 +14,7 @@ public class Main {
             ArrayList<String> prueba = Files.leerDatos("datos-Sb/sb1-P.txt");
             
             KNN kVecinos = new KNN(entrenamiento, prueba, 3);
+            System.out.println("Test");
             
             Thread thread = new Thread();
             
