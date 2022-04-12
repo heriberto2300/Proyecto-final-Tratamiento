@@ -2,6 +2,9 @@ package datos;
 
 import clasificador.Constantes;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.OptionalInt;
+import java.util.stream.IntStream;
 
 public class Datos {
     private final int TOTAL_INSTANCIAS;
@@ -10,7 +13,7 @@ public class Datos {
     
     private boolean[] tipoAtributos;
     private int[] cabecera;
-    
+    private int[][] matrizAV;
     
     
     public Datos(ArrayList<String> datos) {
@@ -18,7 +21,8 @@ public class Datos {
         datos.remove(0);
         this.datos = datos;
         TOTAL_INSTANCIAS = datos.size();
-        test();
+        initMatriz();
+        //test();
     }
     
     private void init(String cabeza) {
@@ -35,6 +39,33 @@ public class Datos {
             }
             cabecera[i] = valor;
         }
+        
+        
+    }
+    
+    private void initMatriz() {
+        IntStream ins = Arrays.stream(cabecera);
+        OptionalInt op = ins.max();
+        int maximo = op.getAsInt();
+        String[] split;
+        
+        matrizAV = new int[Constantes.TOTAL_ATRIBUTOS][maximo];
+        
+        for(String dato : datos) {
+            split = dato.split(",");
+            for(int indexAtributo = 0; indexAtributo < Constantes.TOTAL_ATRIBUTOS; indexAtributo++) {
+                matrizAV[indexAtributo][Integer.parseInt(split[indexAtributo])]++;
+            }
+        }
+        
+        for(int i = 0; i < Constantes.TOTAL_ATRIBUTOS; i++) {
+            for(int j = 0; j < maximo; j++) {
+                System.out.print(matrizAV[i][j] + " ");
+            }
+            System.out.println();
+        } 
+        //Nota: Necesito el total de los nominales y el total de los numericos para sustituir el totalAtributos en esta parte del codigo
+        //NOTA2: LA MATRIZ ES [MAXIMO][TOTAL_NOMINALES]
     }
     
     private void test() {
