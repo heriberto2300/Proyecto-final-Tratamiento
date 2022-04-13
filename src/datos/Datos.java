@@ -9,6 +9,9 @@ import java.util.stream.IntStream;
 public class Datos {
     private final int TOTAL_INSTANCIAS;
     
+    private int totalNumericos;
+    private int totalNominales;
+    
     private final ArrayList<String> datos;
     
     private boolean[] tipoAtributos;
@@ -34,8 +37,10 @@ public class Datos {
             valor = Integer.parseInt(split[i]);
             if(valor == 0) {
                 tipoAtributos[i] = Constantes.NUMERICO;
+                totalNumericos++;
             }else {
                 tipoAtributos[i] = Constantes.NOMINAL;
+                totalNominales++;
             }
             cabecera[i] = valor;
         }
@@ -49,17 +54,20 @@ public class Datos {
         int maximo = op.getAsInt();
         String[] split;
         
-        matrizAV = new int[Constantes.TOTAL_ATRIBUTOS][maximo];
+        matrizAV = new int[maximo][totalNominales];
         
         for(String dato : datos) {
             split = dato.split(",");
             for(int indexAtributo = 0; indexAtributo < Constantes.TOTAL_ATRIBUTOS; indexAtributo++) {
-                matrizAV[indexAtributo][Integer.parseInt(split[indexAtributo])]++;
+                if(tipoAtributos[indexAtributo] == Constantes.NOMINAL) {
+                    matrizAV[Integer.parseInt(split[indexAtributo])][indexAtributo]++;
+                }
+                System.out.println(indexAtributo);
             }
         }
         
-        for(int i = 0; i < Constantes.TOTAL_ATRIBUTOS; i++) {
-            for(int j = 0; j < maximo; j++) {
+        for(int i = 0; i < maximo; i++) {
+            for(int j = 0; j < Constantes.TOTAL_ATRIBUTOS; j++) {
                 System.out.print(matrizAV[i][j] + " ");
             }
             System.out.println();
@@ -71,6 +79,9 @@ public class Datos {
     private void test() {
         System.out.println("TOTAL ATRIBUTOS = " + cabecera.length);
         System.out.println("TOTAL INSTANCIAS = " + TOTAL_INSTANCIAS);
+        System.out.println("TOTAL NUMERICOS = " + totalNumericos);
+        System.out.println("TOTAL NOMINALES = " + totalNominales);
+
         System.out.println();
         System.out.println("CABECERA");
         for(int cabeza : cabecera) {

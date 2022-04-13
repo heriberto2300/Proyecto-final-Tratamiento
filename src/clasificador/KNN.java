@@ -16,7 +16,7 @@ public class KNN implements Runnable{
     public KNN(ArrayList<String> entrenamiento, ArrayList<String> prueba, int k) {
         this.TOTAL_INSTANCIAS = entrenamiento.size();
         this.TOTAL_INSTANCIAS_PRUEBA = prueba.size();
-        this.datos = new Datos(entrenamiento);
+        this.datos = new Datos(prueba);
         this.prueba = prueba;
         this.k = k;
     }
