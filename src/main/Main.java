@@ -10,8 +10,8 @@ public class Main {
     public static void main(String[] args) {
         try {
             
-            ArrayList<String> entrenamiento = Files.leerDatos("datos-Sb/sb1-T.txt");
-            ArrayList<String> prueba = Files.leerDatos("datos-Sb/sb1-P.txt");
+            ArrayList<int[]> entrenamiento = Files.leerDatos("datos-Sb/sb1-T.txt");
+            ArrayList<int[]> prueba = Files.leerDatos("datos-Sb/sb1-P.txt");
             
             KNN kVecinos = new KNN(entrenamiento, prueba, 3);
             

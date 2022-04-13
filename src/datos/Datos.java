@@ -3,6 +3,7 @@ package datos;
 import clasificador.Constantes;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
@@ -12,29 +13,30 @@ public class Datos {
     private int totalNumericos;
     private int totalNominales;
     
-    private final ArrayList<String> datos;
+    private final ArrayList<int[]> datos;
     
     private boolean[] tipoAtributos;
     private int[] cabecera;
+    
     private int[][] matrizAV;
+    private Map<Integer, Double> desvNumericos;
     
-    
-    public Datos(ArrayList<String> datos) {
+    public Datos(ArrayList<int[]> datos) {
         init(datos.get(0));
         datos.remove(0);
         this.datos = datos;
         TOTAL_INSTANCIAS = datos.size();
-        initMatriz();
-        //test();
+        initMatrizAV();
+        initDesviaciones();
+        test();
     }
     
-    private void init(String cabeza) {
-        String split[] = cabeza.split(",");
+    private void init(int[] cabeza) {
         tipoAtributos = new boolean[Constantes.TOTAL_ATRIBUTOS];
         cabecera = new int[Constantes.TOTAL_ATRIBUTOS];
         int valor;
         for(int i = 0; i < Constantes.TOTAL_ATRIBUTOS; i++) {
-            valor = Integer.parseInt(split[i]);
+            valor = cabeza[i];
             if(valor == 0) {
                 tipoAtributos[i] = Constantes.NUMERICO;
                 totalNumericos++;
@@ -49,7 +51,7 @@ public class Datos {
     }
     
     //TODO : MODIFICAR DE TAL FORMA QUE SOLO GUARDE NOMINALES. AQUI SE ENCUENTRA EL CONTEO DE NUMERICOS TAMBIEN
-    private void initMatriz() {
+    private void initMatrizAV() {
         IntStream ins = Arrays.stream(cabecera);
         OptionalInt op = ins.max();
         int maximo = op.getAsInt();
@@ -58,10 +60,9 @@ public class Datos {
         
         matrizAV = new int[maximo][Constantes.TOTAL_ATRIBUTOS]; //es totalNumericos en el segundo indice
         
-        for(String dato : datos) {
-            split = dato.split(",");
+        for(int[] dato : datos) {
             for(int indexAtributo = 0; indexAtributo < Constantes.TOTAL_ATRIBUTOS; indexAtributo++) {
-                matrizAV[Integer.parseInt(split[indexAtributo])][indexAtributo - indiceRelativo]++;
+                matrizAV[dato[indexAtributo]][indexAtributo - indiceRelativo]++;
             }
         }
         
@@ -73,6 +74,12 @@ public class Datos {
         } 
         //Nota: Necesito el total de los nominales y el total de los numericos para sustituir el totalAtributos en esta parte del codigo
         //NOTA2: LA MATRIZ ES [MAXIMO][TOTAL_NOMINALES]
+    }
+    
+    private void initDesviaciones() {
+        for(int i = 0; i < Constantes.TOTAL_ATRIBUTOS; i++) {
+            
+        }
     }
     
     private void test() {
@@ -97,8 +104,8 @@ public class Datos {
         }
         System.out.println();
         System.out.println("INSTANCIAS:");
-        for(String dato : datos) {
-            System.out.println(dato);
+        for(int[] dato : datos) {
+            System.out.println(Arrays.toString(dato));
         }
     }
 }
