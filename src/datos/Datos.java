@@ -48,21 +48,20 @@ public class Datos {
         
     }
     
+    //TODO : MODIFICAR DE TAL FORMA QUE SOLO GUARDE NOMINALES. AQUI SE ENCUENTRA EL CONTEO DE NUMERICOS TAMBIEN
     private void initMatriz() {
         IntStream ins = Arrays.stream(cabecera);
         OptionalInt op = ins.max();
         int maximo = op.getAsInt();
         String[] split;
+        int indiceRelativo = 0;
         
-        matrizAV = new int[maximo][totalNominales];
+        matrizAV = new int[maximo][Constantes.TOTAL_ATRIBUTOS]; //es totalNumericos en el segundo indice
         
         for(String dato : datos) {
             split = dato.split(",");
             for(int indexAtributo = 0; indexAtributo < Constantes.TOTAL_ATRIBUTOS; indexAtributo++) {
-                if(tipoAtributos[indexAtributo] == Constantes.NOMINAL) {
-                    matrizAV[Integer.parseInt(split[indexAtributo])][indexAtributo]++;
-                }
-                System.out.println(indexAtributo);
+                matrizAV[Integer.parseInt(split[indexAtributo])][indexAtributo - indiceRelativo]++;
             }
         }
         
