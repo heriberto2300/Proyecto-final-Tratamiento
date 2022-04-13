@@ -3,9 +3,10 @@ package datos;
 import clasificador.Constantes;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;
-import java.util.stream.IntStream;
+import math.Funciones;
 
 public class Datos {
     private final int TOTAL_INSTANCIAS;
@@ -52,17 +53,14 @@ public class Datos {
     
     //TODO : MODIFICAR DE TAL FORMA QUE SOLO GUARDE NOMINALES. AQUI SE ENCUENTRA EL CONTEO DE NUMERICOS TAMBIEN
     private void initMatrizAV() {
-        IntStream ins = Arrays.stream(cabecera);
-        OptionalInt op = ins.max();
+        OptionalInt op = Arrays.stream(cabecera).max();
         int maximo = op.getAsInt();
-        String[] split;
-        int indiceRelativo = 0;
         
         matrizAV = new int[maximo][Constantes.TOTAL_ATRIBUTOS]; //es totalNumericos en el segundo indice
         
         for(int[] dato : datos) {
             for(int indexAtributo = 0; indexAtributo < Constantes.TOTAL_ATRIBUTOS; indexAtributo++) {
-                matrizAV[dato[indexAtributo]][indexAtributo - indiceRelativo]++;
+                matrizAV[dato[indexAtributo]][indexAtributo]++;
             }
         }
         
@@ -77,9 +75,21 @@ public class Datos {
     }
     
     private void initDesviaciones() {
+        desvNumericos = new HashMap<>();
+        int[] valores;
+        double desv;
         for(int i = 0; i < Constantes.TOTAL_ATRIBUTOS; i++) {
-            
+            if(tipoAtributos[i] == Constantes.NUMERICO) {
+                System.out.println("DETALLES DE ATRIBUTO " + i);
+                valores = getValores(i);
+                desv = Funciones.desvEstandar(valores);
+                System.out.println(Arrays.toString(valores));
+                System.out.println(desv);
+                desvNumericos.put(i, desv);
+            }
         }
+        
+        System.out.println("HASMAP DESVIACIONES" + desvNumericos);
     }
     
     private void test() {
@@ -108,4 +118,13 @@ public class Datos {
             System.out.println(Arrays.toString(dato));
         }
     }
+    
+    public int[] getValores(int indexAtributo) {
+        int[] valores = new int[TOTAL_INSTANCIAS];
+        for(int i = 0; i < TOTAL_INSTANCIAS; i++) {
+            valores[i] = datos.get(i)[indexAtributo];
+        }
+        return valores;
+    }
+    
 }

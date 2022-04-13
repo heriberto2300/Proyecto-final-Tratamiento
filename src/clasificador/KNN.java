@@ -24,7 +24,7 @@ public class KNN implements Runnable{
     
     @Override
     public void run() {
-        System.out.println("Hola mundo");
+        System.out.println("Clasificador iniciado");
     }
     
 }
