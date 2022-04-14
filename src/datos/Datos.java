@@ -32,7 +32,7 @@ public class Datos {
         initMatrizAV();
         initMatrizAVC();
         initDesviaciones();
-        test();
+        //test();
     }
     
     private void init(int[] cabeza) {
@@ -67,12 +67,12 @@ public class Datos {
             }
         }
         
-        for(int i = 0; i < maximo; i++) {
+        /*for(int i = 0; i < maximo; i++) {
             for(int j = 0; j < Constantes.TOTAL_ATRIBUTOS; j++) {
                 System.out.print(matrizAV[i][j] + " ");
             }
             System.out.println();
-        } 
+        } */
         //Nota: Necesito el total de los nominales y el total de los numericos para sustituir el totalAtributos en esta parte del codigo
         //NOTA2: LA MATRIZ ES [MAXIMO][TOTAL_NOMINALES]
     }
@@ -106,16 +106,16 @@ public class Datos {
             }
         }
         
-        for(int j = 0; j < Constantes.TOTAL_ATRIBUTOS; j++) {
+        /*for(int j = 0; j < Constantes.TOTAL_ATRIBUTOS; j++) {
             for(int i = 0; i < maximo; i++) {
                 if(matrizAVC[i][j] == null) {
-                    System.out.println("Atributo " + j + " Con valor " + i + " Se distribuye de la siguiente forma; NULL");
+                    System.out.println("Atributo " + j + " Con valor " + i + " Se distribuye de la siguiente forma NULL");
                 }else {
                     System.out.println("Atributo " + j + " Con valor " + i + " Se distribuye de la siguiente forma " + matrizAVC[i][j]);
 
                 }
             }
-        }
+        }*/
     }
     
     private void initDesviaciones() {
@@ -124,16 +124,16 @@ public class Datos {
         double desv;
         for(int i = 0; i < Constantes.TOTAL_ATRIBUTOS; i++) {
             if(tipoAtributos[i] == Constantes.NUMERICO) {
-                System.out.println("DETALLES DE ATRIBUTO " + i);
+                //System.out.println("DETALLES DE ATRIBUTO " + i);
                 valores = getValores(i);
                 desv = Funciones.desvEstandar(valores);
-                System.out.println(Arrays.toString(valores));
-                System.out.println(desv);
+                //System.out.println(Arrays.toString(valores));
+                //System.out.println(desv);
                 desvNumericos.put(i, desv);
             }
         }
         
-        System.out.println("HASMAP DESVIACIONES" + desvNumericos);
+        //System.out.println("HASMAP DESVIACIONES" + desvNumericos);
     }
     
     private void test() {
@@ -170,6 +170,14 @@ public class Datos {
             valores[i] = datos.get(i)[indexAtributo];
         }
         return valores;
+    }
+    
+    public int NaxC (int indexAtributo, int valor, int clase) {
+        return matrizAVC[valor][indexAtributo].get(clase);
+    }
+    
+    public int Nax(int indexAtributo, int valor) {
+        return matrizAV[valor][indexAtributo];
     }
     
 }
