@@ -172,6 +172,18 @@ public class Datos {
         return valores;
     }
     
+    public boolean getTipoAtributo(int indexAtributo) {
+        return tipoAtributos[indexAtributo];
+    }
+    
+    public int getTotalClases() {
+        return totalClases;
+    }
+    
+    public double getDesv(int indexAtributo) {
+        return desvNumericos.get(indexAtributo);
+    }
+    
     public int NaxC (int indexAtributo, int valor, int clase) {
         return matrizAVC[valor][indexAtributo].get(clase);
     }
