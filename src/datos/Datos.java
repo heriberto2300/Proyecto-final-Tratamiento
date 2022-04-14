@@ -13,6 +13,7 @@ public class Datos {
     
     private int totalNumericos;
     private int totalNominales;
+    private int totalClases;
     
     private final ArrayList<int[]> datos;
     
@@ -20,6 +21,7 @@ public class Datos {
     private int[] cabecera;
     
     private int[][] matrizAV;
+    private Map<Integer, Integer>[][] matrizAVC; 
     private Map<Integer, Double> desvNumericos;
     
     public Datos(ArrayList<int[]> datos) {
@@ -28,6 +30,7 @@ public class Datos {
         this.datos = datos;
         TOTAL_INSTANCIAS = datos.size();
         initMatrizAV();
+        initMatrizAVC();
         initDesviaciones();
         test();
     }
@@ -48,7 +51,7 @@ public class Datos {
             cabecera[i] = valor;
         }
         
-        
+        totalClases = cabeza[Constantes.TOTAL_ATRIBUTOS];
     }
     
     //TODO : MODIFICAR DE TAL FORMA QUE SOLO GUARDE NOMINALES. AQUI SE ENCUENTRA EL CONTEO DE NUMERICOS TAMBIEN
@@ -74,6 +77,47 @@ public class Datos {
         //NOTA2: LA MATRIZ ES [MAXIMO][TOTAL_NOMINALES]
     }
     
+    private void initMatrizAVC() {
+        OptionalInt op = Arrays.stream(cabecera).max();
+        int maximo = op.getAsInt();
+        
+        matrizAVC = new HashMap[maximo][Constantes.TOTAL_ATRIBUTOS];    
+        
+        for(int j = 0; j < Constantes.TOTAL_ATRIBUTOS; j++) {
+            for(int i = 0; i < cabecera[j]; i++) {
+                matrizAVC[i][j] = new HashMap<>();
+                for(int clase = 0; clase < totalClases; clase++) {
+                    matrizAVC[i][j].put(clase, 0);
+                }
+            }
+        }
+        
+        int aux;
+        for(int[] dato : datos) {
+            for(int indexAtributo = 0; indexAtributo < Constantes.TOTAL_ATRIBUTOS; indexAtributo++) {
+                if(tipoAtributos[indexAtributo] != Constantes.NUMERICO) {
+                    for(int clase = 0; clase < totalClases; clase++) {
+                        if(clase == dato[Constantes.TOTAL_ATRIBUTOS]) {
+                            aux =  matrizAVC[dato[indexAtributo]][indexAtributo].get(clase) + 1;
+                            matrizAVC[dato[indexAtributo]][indexAtributo].put(clase, aux);
+                        }
+                    }    
+                }
+            }
+        }
+        
+        for(int j = 0; j < Constantes.TOTAL_ATRIBUTOS; j++) {
+            for(int i = 0; i < maximo; i++) {
+                if(matrizAVC[i][j] == null) {
+                    System.out.println("Atributo " + j + " Con valor " + i + " Se distribuye de la siguiente forma; NULL");
+                }else {
+                    System.out.println("Atributo " + j + " Con valor " + i + " Se distribuye de la siguiente forma " + matrizAVC[i][j]);
+
+                }
+            }
+        }
+    }
+    
     private void initDesviaciones() {
         desvNumericos = new HashMap<>();
         int[] valores;
@@ -97,6 +141,7 @@ public class Datos {
         System.out.println("TOTAL INSTANCIAS = " + TOTAL_INSTANCIAS);
         System.out.println("TOTAL NUMERICOS = " + totalNumericos);
         System.out.println("TOTAL NOMINALES = " + totalNominales);
+        System.out.println("TOTAL CLASES = " + totalClases);
 
         System.out.println();
         System.out.println("CABECERA");
