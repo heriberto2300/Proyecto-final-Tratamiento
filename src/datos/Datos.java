@@ -184,6 +184,11 @@ public class Datos {
         return desvNumericos.get(indexAtributo);
     }
     
+    
+    public int[] getInstancia(int index) {
+        return datos.get(index);
+    }
+    
     public int NaxC (int indexAtributo, int valor, int clase) {
         return matrizAVC[valor][indexAtributo].get(clase);
     }

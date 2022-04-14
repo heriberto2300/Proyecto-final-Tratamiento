@@ -24,9 +24,7 @@ public class KNN implements Runnable{
     
     @Override
     public void run() {
-        //System.out.println(datos.Nax(4, 2));
-        System.out.println(datos.NaxC(3, 1, 3));
-        System.out.println("Clasificador iniciado");
+        
     }
     
     public double hvdm(int[] instanciaA, int[] instanciaB) {
