@@ -32,10 +32,10 @@ public class KNN implements Runnable{
         System.out.println("INICIANDO CLASFICADOR");
         for(int[] instancia : prueba) {
             int[] clases = getCercanos(instancia);
-            /*System.out.println("Clases mas cercanas ");
+            System.out.println("Clases mas cercanas ");
             for(int clase : clases) {
                 System.out.println(clase);
-            }*/
+            }
             
             //System.out.println("LE ASIGNO CLASE " + clases[0]);
             
@@ -99,9 +99,9 @@ public class KNN implements Runnable{
         
         double[][] distancias = new double[TOTAL_INSTANCIAS][2];
         
-        //System.out.println("Instancia a evaluar : " + Arrays.toString(instancia));
+        System.out.println("Instancia a evaluar : " + Arrays.toString(instancia));
         
-        for(int i = 0; i <TOTAL_INSTANCIAS; i++) {
+        for(int i = 0; i < TOTAL_INSTANCIAS; i++) {
             distancias[i][0] = datos.getInstancia(i)[Constantes.TOTAL_ATRIBUTOS];
             distancias[i][1] = hvdm(instancia, datos.getInstancia(i));
             //System.out.println("Evaluando con " + Arrays.toString(datos.getInstancia(i)) + " con distancia " + distancias[i][1]);
