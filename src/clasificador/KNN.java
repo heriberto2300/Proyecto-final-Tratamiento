@@ -4,6 +4,7 @@ import datos.Datos;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import math.Funciones;
 
 public class KNN implements Runnable{
     private final int TOTAL_INSTANCIAS;
@@ -27,7 +28,6 @@ public class KNN implements Runnable{
     
     @Override
     public void run() {
-        Scanner x = new Scanner(System.in);
         int correctos = 0, incorrectos = 0;
         System.out.println("INICIANDO CLASFICADOR");
         for(int[] instancia : prueba) {
@@ -36,15 +36,16 @@ public class KNN implements Runnable{
             for(int clase : clases) {
                 System.out.println(clase);
             }
+            System.out.println("Le voy a asignar clase " + Funciones.moda(clases));
             
             //System.out.println("LE ASIGNO CLASE " + clases[0]);
             
-            if(clases[0] == instancia[Constantes.TOTAL_ATRIBUTOS]) {
+            //if(clases[0] == instancia[Constantes.TOTAL_ATRIBUTOS]) {
+            if(Funciones.moda(clases) == instancia[Constantes.TOTAL_ATRIBUTOS]) {
                 correctos++;
             }else {
                 incorrectos++;
             }
-            //x.nextLine();
         }
         
         evaluar(correctos, incorrectos);
@@ -68,7 +69,6 @@ public class KNN implements Runnable{
     }
     
     public double normalizedVdm(int valorAtributoA, int valorAtributoB, int indexAtributo) {
-        Scanner x = new Scanner(System.in);
         double resultado = 0.0;
         double numA, numB, denA, denB;
         for(int clase = 0; clase < datos.getTotalClases(); clase++) {
@@ -82,7 +82,6 @@ public class KNN implements Runnable{
             resultado += Math.abs((numA / denA) - (numB / denB));
         }
         //System.out.println("Normalized VDM es " + resultado);
-        //x.nextLine();
 
         return resultado;
     }
