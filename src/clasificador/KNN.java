@@ -36,7 +36,7 @@ public class KNN implements Runnable{
             for(int clase : clases) {
                 System.out.println(clase);
             }
-            System.out.println("Le voy a asignar clase " + Funciones.moda(clases));
+            System.out.println("Le voy a asignar clase " + Funciones.mediaAritmetica(clases)); //Validar si es moda o media
             
             //System.out.println("LE ASIGNO CLASE " + clases[0]);
             
