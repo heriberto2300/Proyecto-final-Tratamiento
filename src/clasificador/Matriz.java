@@ -16,6 +16,7 @@ public class Matriz {
         for(Map.Entry<Integer, Integer> dato : datos.entrySet()) {
             matriz[dato.getValue()][dato.getKey()]++;
         }
+        System.out.println("Ya acabe");
     }
     
     public void imprimir() {
