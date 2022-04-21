@@ -3,7 +3,8 @@ package clasificador;
 import datos.Datos;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
 import math.Funciones;
 
 public class KNN implements Runnable{
@@ -16,10 +17,10 @@ public class KNN implements Runnable{
     private final int k;
     
     
-    public KNN(ArrayList<int[]> entrenamiento, ArrayList<int[]> prueba, int k) {
-        this.TOTAL_INSTANCIAS = entrenamiento.size() - 1;
+    public KNN(Datos datos, ArrayList<int[]> prueba, int k) {
+        this.datos = datos;
+        this.TOTAL_INSTANCIAS =  datos.getTotalInstancias();
         this.TOTAL_INSTANCIAS_PRUEBA = prueba.size() - 1;
-        this.datos = new Datos(entrenamiento);
         this.prueba = prueba;
         prueba.remove(0);
         this.k = k;
@@ -29,6 +30,7 @@ public class KNN implements Runnable{
     @Override
     public void run() {
         int correctos = 0, incorrectos = 0;
+        Map<Integer, Integer> datosMatriz = new HashMap<>();
         System.out.println("INICIANDO CLASFICADOR");
         for(int[] instancia : prueba) {
             int[] clases = getCercanos(instancia);
@@ -36,19 +38,22 @@ public class KNN implements Runnable{
             for(int clase : clases) {
                 System.out.println(clase);
             }
-            System.out.println("Le voy a asignar clase " + Funciones.mediaAritmetica(clases)); //Validar si es moda o media
             
-            //System.out.println("LE ASIGNO CLASE " + clases[0]);
+            int clase = Funciones.moda(clases);
             
-            //if(clases[0] == instancia[Constantes.TOTAL_ATRIBUTOS]) {
-            if(Funciones.moda(clases) == instancia[Constantes.TOTAL_ATRIBUTOS]) {
+            System.out.println("Le voy a asignar clase " + clase); //Validar si es moda o media
+            
+            if(clase == instancia[Constantes.TOTAL_ATRIBUTOS]) {
                 correctos++;
             }else {
                 incorrectos++;
             }
+            
+            datosMatriz.put(instancia[Constantes.TOTAL_ATRIBUTOS], clase);
+            
         }
         
-        evaluar(correctos, incorrectos);
+        evaluar(correctos, incorrectos, datosMatriz);
         
         System.out.println("Clasificador finalizado");
     }
@@ -75,10 +80,10 @@ public class KNN implements Runnable{
             //System.out.println("indexAtributo: " + indexAtributo + ", Atributo A " + valorAtributoA + ", CLASE BUSCADA " + clase);
             //System.out.println("indexAtributo: " + indexAtributo + ", Atributo B " + valorAtributoB + ", CLASE BUSCADA " + clase);
             //x.nextLine();
-            numA = datos.NaxC(indexAtributo, valorAtributoA, clase);
-            numB = datos.NaxC(indexAtributo, valorAtributoB, clase);
-            denA = datos.Nax(indexAtributo, valorAtributoA);
-            denB = datos.Nax(indexAtributo, valorAtributoB);
+            numA = (double)datos.NaxC(indexAtributo, valorAtributoA, clase);
+            numB = (double)datos.NaxC(indexAtributo, valorAtributoB, clase);
+            denA = (double)datos.Nax(indexAtributo, valorAtributoA);
+            denB = (double)datos.Nax(indexAtributo, valorAtributoB);
             resultado += Math.abs((numA / denA) - (numB / denB));
         }
         //System.out.println("Normalized VDM es " + resultado);
@@ -87,8 +92,7 @@ public class KNN implements Runnable{
     }
     
     public double normalizedDiff(int valorAtributoA, int valorAtributoB, int indexAtributo) {
-        
-        //System.out.println("NORMALIZED DIFF ES " + Math.abs(valorAtributoA - valorAtributoB) / 4 * datos.getDesv(indexAtributo));
+        //System.out.println("NORMALIZED DIFF ES " + Math.abs((double)valorAtributoA - (double)valorAtributoB) / 4 * datos.getDesv(indexAtributo));
         
         return Math.abs((double)valorAtributoA - (double)valorAtributoB) / 4 * datos.getDesv(indexAtributo);
     }
@@ -130,7 +134,7 @@ public class KNN implements Runnable{
         return cercanos;
     }
     
-    public void evaluar(int correctos, int incorrectos) {
+    public void evaluar(int correctos, int incorrectos, Map<Integer, Integer> datosMatriz) {
         System.out.println("INSTANCIAS CORRECTAMENTE CLASIFICADAS " + correctos);
         System.out.println("INSTANCIAS INCORRECTAMENTE CLASIFICADAS " + incorrectos);
         double yes = (double)correctos * 100 / TOTAL_INSTANCIAS_PRUEBA;
@@ -139,5 +143,9 @@ public class KNN implements Runnable{
         System.out.println("PORCENTAJE DE ERROR = " + no);
         double total = no + yes;
         System.out.println("PORCENTAJE TOTAL = " + total);
+        
+        Matriz confusion = new Matriz(datos.getTotalClases(), datosMatriz);
+        System.out.println("MATRIZ DE CONFUSION:");
+        confusion.imprimir();
     }
 }

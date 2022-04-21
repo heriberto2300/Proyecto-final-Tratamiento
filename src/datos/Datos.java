@@ -184,9 +184,20 @@ public class Datos {
         return desvNumericos.get(indexAtributo);
     }
     
-    
     public int[] getInstancia(int index) {
         return datos.get(index);
+    }
+    
+    public int getTotalInstancias() {
+        return TOTAL_INSTANCIAS;
+    }
+    
+    public boolean[] getTipoAtributos() {
+        return tipoAtributos;
+    }
+    
+    public int[] getCabecera() {
+        return cabecera;
     }
     
     public int NaxC (int indexAtributo, int valor, int clase) {
