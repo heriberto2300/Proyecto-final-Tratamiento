@@ -30,7 +30,9 @@ public class KNN implements Runnable{
     @Override
     public void run() {
         int correctos = 0, incorrectos = 0;
-        Map<Integer, Integer> datosMatriz = new HashMap<>();
+        int i = 0;
+        int[][] datosMatriz = new int[TOTAL_INSTANCIAS_PRUEBA][2];
+        
         System.out.println("INICIANDO CLASFICADOR");
         for(int[] instancia : prueba) {
             int[] clases = getCercanos(instancia);
@@ -49,8 +51,9 @@ public class KNN implements Runnable{
                 incorrectos++;
             }
             
-            datosMatriz.put(instancia[Constantes.TOTAL_ATRIBUTOS], clase);
-            
+            datosMatriz[i][0] = instancia[Constantes.TOTAL_ATRIBUTOS]; //clase real
+            datosMatriz[i][1] = clase; //clase asignada;
+            i++;
         }
         
         evaluar(correctos, incorrectos, datosMatriz);
@@ -134,7 +137,7 @@ public class KNN implements Runnable{
         return cercanos;
     }
     
-    public void evaluar(int correctos, int incorrectos, Map<Integer, Integer> datosMatriz) {
+    public void evaluar(int correctos, int incorrectos, int[][] datosMatriz) {
         System.out.println("INSTANCIAS CORRECTAMENTE CLASIFICADAS " + correctos);
         System.out.println("INSTANCIAS INCORRECTAMENTE CLASIFICADAS " + incorrectos);
         double yes = (double)correctos * 100 / TOTAL_INSTANCIAS_PRUEBA;

@@ -1,5 +1,6 @@
 package main;
 
+import clasificador.Arbol;
 import clasificador.KNN;
 import datos.Datos;
 import datos.Files;
@@ -19,7 +20,7 @@ public class Main {
             
             KNN kVecinos = new KNN(datos, prueba, 5);
             
-            Thread thread = new Thread(kVecinos);
+            Thread threadKNN = new Thread(kVecinos);
             
             /*int[] a = {3, 2, 1, 0, 2};
             int[] b = {2, 1, 2, 1, 2};
@@ -28,15 +29,22 @@ public class Main {
             
             /*TODO: VALIDAR SI ES MODA O MEDIA PARA LOS VECINOS MAS CERCANOS*/
             
-            thread.start();
+            //threadKNN.start();
             
-            thread.join();
+            threadKNN.join();
             
-            /*String nombreT = "sb1-T.arff";
+            String nombreT = "sb1-T.arff";
             String nombreP = "sb1-P.arff";
-            String cabecera = Files.initCabeceraARFF(datos.getTipoAtributos(), datos.getCabecera(), datos.getTotalClases(), nombreT);
+            /*String cabecera = Files.initCabeceraARFF(datos.getTipoAtributos(), datos.getCabecera(), datos.getTotalClases(), nombreT);
             Files.crearARFF(entrenamiento, cabecera, nombreT);
             Files.crearARFF(prueba, cabecera, nombreP);*/
+            
+            Arbol arbol = new Arbol(nombreT, nombreP);
+            Thread threadArbol = new Thread(arbol);
+            
+            threadArbol.start();
+            
+            threadArbol.join();
             
         } catch (InterruptedException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

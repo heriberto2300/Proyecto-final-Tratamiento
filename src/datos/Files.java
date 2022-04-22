@@ -32,7 +32,7 @@ public class Files {
     
     public static void crearARFF(ArrayList<int[]> datos, String cabecera, String nombre) {
          try {
-            FileOutputStream fo = new FileOutputStream("datos-Sb/" + nombre);
+            FileOutputStream fo = new FileOutputStream(Constantes.PATH + nombre);
             BufferedWriter bf = new BufferedWriter(new OutputStreamWriter(fo, "utf-8"));
             
             bf.append(Constantes.REL + " " + nombre.substring(0, nombre.length() - 5) + "\n\n");

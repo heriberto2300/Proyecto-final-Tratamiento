@@ -1,28 +1,29 @@
 package clasificador;
 
-import java.util.Map;
 
 public class Matriz {
-    private int dimension;
-    private int[][] matriz;
+    private final int dimension;
+    private final int[][] matriz;
     
-    public Matriz(int dimension, Map<Integer, Integer> datos) {
+    public Matriz(int dimension, int[][] datosMatriz) {
         this.dimension = dimension;
         this.matriz = new int[dimension][dimension];
-        initMatriz(datos);
+        initMatriz(datosMatriz);
     }
     
-    private void initMatriz(Map<Integer, Integer> datos) {
-        for(Map.Entry<Integer, Integer> dato : datos.entrySet()) {
-            matriz[dato.getValue()][dato.getKey()]++;
+    private void initMatriz(int[][] datosMatriz) {
+        int real, asignada;
+        for(int[] datoMatriz : datosMatriz) {
+            real = datoMatriz[0];
+            asignada = datoMatriz[1];
+            matriz[asignada][real]++;
         }
-        System.out.println("Ya acabe");
     }
     
     public void imprimir() {
         for(int asignada = 0; asignada < dimension; asignada++) {
             for(int real = 0; real < dimension; real++) {
-                System.out.print(matriz[asignada][real]);
+                System.out.print(matriz[asignada][real] + " ");
             }
             System.out.println();
         }
