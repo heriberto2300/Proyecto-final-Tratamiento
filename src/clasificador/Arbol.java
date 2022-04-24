@@ -35,8 +35,9 @@ public class Arbol implements Runnable {
             Evaluation evaluacion = new Evaluation(entrenamiento);
             evaluacion.evaluateModel(arbol, prueba);
             
-            System.out.println(arbol.graph());
-            System.out.println(evaluacion.toSummaryString(true));
+            //System.out.println(arbol.graph());
+            arbol.graph();
+            System.out.println(evaluacion.toSummaryString());
             
             double[][] matrizConfusion = evaluacion.confusionMatrix();
             
