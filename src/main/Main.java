@@ -29,7 +29,7 @@ public class Main {
             
             /*TODO: VALIDAR SI ES MODA O MEDIA PARA LOS VECINOS MAS CERCANOS*/
             
-            //threadKNN.start();
+            threadKNN.start();
             
             threadKNN.join();
             
@@ -42,7 +42,7 @@ public class Main {
             Arbol arbol = new Arbol(nombreT, nombreP);
             Thread threadArbol = new Thread(arbol);
             
-            threadArbol.start();
+            //threadArbol.start();
             
             threadArbol.join();
             
