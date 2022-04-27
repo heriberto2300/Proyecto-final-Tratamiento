@@ -19,10 +19,10 @@ public class Main {
             ArrayList<int[]> entrenamiento = Files.leerDatos("datos-Sb/sb1-T.txt");
             ArrayList<int[]> prueba = Files.leerDatos("datos-Sb/sb1-P.txt");
             
-            Datos datos = new Datos(entrenamiento, true);
+            Datos datos = new Datos(entrenamiento, false);
             
             /*Clasficador KNN*/
-            KNN kVecinos = new KNN(datos, prueba, 5, true);
+            KNN kVecinos = new KNN(datos, prueba, 5, false);
             
             Thread threadKNN = new Thread(kVecinos);
             
@@ -53,6 +53,7 @@ public class Main {
             x.nextLine();
             
             /*Clasificador C4.5*/
+            System.out.println("\n----------CONSTRUCCION DE DATOS EN FORMATO ARFF PARA WEKA---------\n");
 
             Arbol arbol = new Arbol(nombreT, nombreP);
             Thread threadArbol = new Thread(arbol);
