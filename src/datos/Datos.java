@@ -10,6 +10,8 @@ import math.Funciones;
 
 public class Datos {
     private final int TOTAL_INSTANCIAS;
+    private int TOTAL_ATRIBUTOS;
+
     
     private int totalNumericos;
     private int totalNominales;
@@ -24,7 +26,8 @@ public class Datos {
     private Map<Integer, Integer>[][] matrizAVC; 
     private Map<Integer, Double> desvNumericos;
     
-    public Datos(ArrayList<int[]> datos) {
+    
+    public Datos(ArrayList<int[]> datos, boolean mostrarDetalles) {
         init(datos.get(0));
         datos.remove(0);
         this.datos = datos;
@@ -32,14 +35,18 @@ public class Datos {
         initMatrizAV();
         initMatrizAVC();
         initDesviaciones();
-        //test();
+        
+        if(mostrarDetalles) {
+            test();
+        }
     }
     
     private void init(int[] cabeza) {
-        tipoAtributos = new boolean[Constantes.TOTAL_ATRIBUTOS];
-        cabecera = new int[Constantes.TOTAL_ATRIBUTOS];
+        TOTAL_ATRIBUTOS = cabeza.length - 1;
+        tipoAtributos = new boolean[TOTAL_ATRIBUTOS];
+        cabecera = new int[TOTAL_ATRIBUTOS];
         int valor;
-        for(int i = 0; i < Constantes.TOTAL_ATRIBUTOS; i++) {
+        for(int i = 0; i < TOTAL_ATRIBUTOS; i++) {
             valor = cabeza[i];
             if(valor == 0) {
                 tipoAtributos[i] = Constantes.NUMERICO;
@@ -51,18 +58,17 @@ public class Datos {
             cabecera[i] = valor;
         }
         
-        totalClases = cabeza[Constantes.TOTAL_ATRIBUTOS];
+        totalClases = cabeza[TOTAL_ATRIBUTOS];
     }
     
-    //TODO : MODIFICAR DE TAL FORMA QUE SOLO GUARDE NOMINALES. AQUI SE ENCUENTRA EL CONTEO DE NUMERICOS TAMBIEN
     private void initMatrizAV() {
         OptionalInt op = Arrays.stream(cabecera).max();
         int maximo = op.getAsInt();
         
-        matrizAV = new int[maximo][Constantes.TOTAL_ATRIBUTOS]; //es totalNumericos en el segundo indice
+        matrizAV = new int[maximo][TOTAL_ATRIBUTOS]; 
         
         for(int[] dato : datos) {
-            for(int indexAtributo = 0; indexAtributo < Constantes.TOTAL_ATRIBUTOS; indexAtributo++) {
+            for(int indexAtributo = 0; indexAtributo < TOTAL_ATRIBUTOS; indexAtributo++) {
                 matrizAV[dato[indexAtributo]][indexAtributo]++;
             }
         }
@@ -73,17 +79,15 @@ public class Datos {
             }
             System.out.println();
         } */
-        //Nota: Necesito el total de los nominales y el total de los numericos para sustituir el totalAtributos en esta parte del codigo
-        //NOTA2: LA MATRIZ ES [MAXIMO][TOTAL_NOMINALES]
     }
     
     private void initMatrizAVC() {
         OptionalInt op = Arrays.stream(cabecera).max();
         int maximo = op.getAsInt();
         
-        matrizAVC = new HashMap[maximo][Constantes.TOTAL_ATRIBUTOS];    
+        matrizAVC = new HashMap[maximo][TOTAL_ATRIBUTOS];    
         
-        for(int j = 0; j < Constantes.TOTAL_ATRIBUTOS; j++) {
+        for(int j = 0; j < TOTAL_ATRIBUTOS; j++) {
             for(int i = 0; i < cabecera[j]; i++) {
                 matrizAVC[i][j] = new HashMap<>();
                 for(int clase = 0; clase < totalClases; clase++) {
@@ -94,10 +98,10 @@ public class Datos {
         
         int aux;
         for(int[] dato : datos) {
-            for(int indexAtributo = 0; indexAtributo < Constantes.TOTAL_ATRIBUTOS; indexAtributo++) {
+            for(int indexAtributo = 0; indexAtributo < TOTAL_ATRIBUTOS; indexAtributo++) {
                 if(tipoAtributos[indexAtributo] != Constantes.NUMERICO) {
                     for(int clase = 0; clase < totalClases; clase++) {
-                        if(clase == dato[Constantes.TOTAL_ATRIBUTOS]) {
+                        if(clase == dato[TOTAL_ATRIBUTOS]) {
                             aux =  matrizAVC[dato[indexAtributo]][indexAtributo].get(clase) + 1;
                             matrizAVC[dato[indexAtributo]][indexAtributo].put(clase, aux);
                         }
@@ -122,7 +126,7 @@ public class Datos {
         desvNumericos = new HashMap<>();
         int[] valores;
         double desv;
-        for(int i = 0; i < Constantes.TOTAL_ATRIBUTOS; i++) {
+        for(int i = 0; i < TOTAL_ATRIBUTOS; i++) {
             if(tipoAtributos[i] == Constantes.NUMERICO) {
                 //System.out.println("DETALLES DE ATRIBUTO " + i);
                 valores = getValores(i);
@@ -137,7 +141,8 @@ public class Datos {
     }
     
     private void test() {
-        System.out.println("TOTAL ATRIBUTOS = " + cabecera.length);
+        System.out.println("------------DETALLES DEL CONJUNTO DE ENTRENAMIENTO----------\n");
+        System.out.println("TOTAL ATRIBUTOS = " + TOTAL_ATRIBUTOS);
         System.out.println("TOTAL INSTANCIAS = " + TOTAL_INSTANCIAS);
         System.out.println("TOTAL NUMERICOS = " + totalNumericos);
         System.out.println("TOTAL NOMINALES = " + totalNominales);
@@ -158,10 +163,6 @@ public class Datos {
             }
         }
         System.out.println();
-        System.out.println("INSTANCIAS:");
-        for(int[] dato : datos) {
-            System.out.println(Arrays.toString(dato));
-        }
     }
     
     public int[] getValores(int indexAtributo) {
@@ -198,6 +199,10 @@ public class Datos {
     
     public int[] getCabecera() {
         return cabecera;
+    }
+    
+    public int getTotalAtributos() {
+        return TOTAL_ATRIBUTOS;
     }
     
     public int NaxC (int indexAtributo, int valor, int clase) {

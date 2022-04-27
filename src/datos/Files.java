@@ -53,7 +53,7 @@ public class Files {
     
     public static String initCabeceraARFF(boolean[] tipoAtributos, int[] cabecera, int totalClases, String nombre) {
         String cabeza = "";
-        for(int indexAtributo = 0; indexAtributo < Constantes.TOTAL_ATRIBUTOS; indexAtributo++) {
+        for(int indexAtributo = 0; indexAtributo < cabecera.length; indexAtributo++) {
             if(tipoAtributos[indexAtributo] == Constantes.NOMINAL) {
                 cabeza += Constantes.ATT + " " + indexAtributo + " {";
                 for(int valorAtributo = 0; valorAtributo < cabecera[indexAtributo]; valorAtributo++) {

@@ -30,17 +30,20 @@ public class Arbol implements Runnable {
     @Override
     public void run() {
         try {
+            System.out.println("\n----------INICIANDO CLASIFICADOR C4.5---------\n");
+
             arbol.buildClassifier(entrenamiento);
             
             Evaluation evaluacion = new Evaluation(entrenamiento);
             evaluacion.evaluateModel(arbol, prueba);
             
-            //System.out.println(arbol.graph());
+            System.out.println(arbol.graph());
             arbol.graph();
             System.out.println(evaluacion.toSummaryString());
             
             double[][] matrizConfusion = evaluacion.confusionMatrix();
             
+            System.out.println("\n------MATRIZ DE CONFUSION:------\n");
             for(int i = 0; i < matrizConfusion.length; i++) {
                 for(int j = 0; j < matrizConfusion.length; j++) {
                     System.out.print((int)matrizConfusion[i][j] + " ");
