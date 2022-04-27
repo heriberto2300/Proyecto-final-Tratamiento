@@ -1,5 +1,6 @@
 package clasificador;
 
+import graphics.VisualizadorArbol;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import weka.classifiers.Evaluation;
@@ -49,6 +50,8 @@ public class Arbol implements Runnable {
                 }
                 System.out.println();
             }
+            
+            new VisualizadorArbol(arbol);
         } catch (Exception ex) {
             Logger.getLogger(Arbol.class.getName()).log(Level.SEVERE, null, ex);
         }
