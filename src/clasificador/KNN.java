@@ -34,7 +34,7 @@ public class KNN implements Runnable{
         int correctos = 0, incorrectos = 0;
         int i = 0;
         int[][] datosMatriz = new int[TOTAL_INSTANCIAS_PRUEBA][2];
-        
+        int indexClase = TOTAL_ATRIBUTOS;
         System.out.println("------------INICIANDO CLASIFICADOR KNN----------\n");
 
         for(int[] instancia : prueba) {
@@ -51,13 +51,13 @@ public class KNN implements Runnable{
 
             }
             
-            if(clase == instancia[TOTAL_ATRIBUTOS]) {
+            if(clase == instancia[indexClase]) {
                 correctos++;
             }else {
                 incorrectos++;
             }
             
-            datosMatriz[i][0] = instancia[TOTAL_ATRIBUTOS]; //clase real
+            datosMatriz[i][0] = instancia[indexClase]; //clase real
             datosMatriz[i][1] = clase; //clase asignada;
             i++;
         }
