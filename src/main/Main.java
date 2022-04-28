@@ -22,10 +22,10 @@ public class Main {
             String t2 = "aust1-T.txt";
             String p2 = "aust1-P.txt";
             
-            ArrayList<int[]> entrenamiento = Files.leerDatos("datos-Sb/aust1-T.txt");
-            ArrayList<int[]> prueba = Files.leerDatos("datos-Sb/aust1-P.txt");
+            ArrayList<String> entrenamiento = Files.leerDatos("datos-Sb/aust1-T.txt");
+            ArrayList<String> prueba = Files.leerDatos("datos-Sb/aust1-P.txt");
             
-            Datos datos = new Datos(entrenamiento, true);
+            Datos datos = new Datos(entrenamiento, false);
             
             /*Clasficador KNN*/
             KNN kVecinos = new KNN(datos, prueba, 5, true);
@@ -37,7 +37,7 @@ public class Main {
             
             System.out.println(kVecinos.hvdm(a, b));*/
             
-            threadKNN.start();
+            //threadKNN.start();
             
             threadKNN.join();
             
@@ -63,7 +63,7 @@ public class Main {
             
             /*Clasificador C4.5*/
 
-            Arbol arbol = new Arbol(nombreT, nombreP);
+            Arbol arbol = new Arbol(nombreT2, nombreP2);
             Thread threadArbol = new Thread(arbol);
             
             threadArbol.start();

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;
+import java.util.stream.Stream;
 import math.Funciones;
 
 public class Datos {
@@ -17,7 +18,7 @@ public class Datos {
     private int totalNominales;
     private int totalClases;
     
-    private final ArrayList<int[]> datos;
+    private final ArrayList<String> datos;
     
     private boolean[] tipoAtributos;
     private int[] cabecera;
@@ -27,13 +28,13 @@ public class Datos {
     private Map<Integer, Double> desvNumericos;
     
     
-    public Datos(ArrayList<int[]> datos, boolean mostrarDetalles) {
+    public Datos(ArrayList<String> datos, boolean mostrarDetalles) {
         init(datos.get(0));
         datos.remove(0);
         this.datos = datos;
         TOTAL_INSTANCIAS = datos.size();
         initMatrizAV();
-        initMatrizAVC();
+        //initMatrizAVC();
         initDesviaciones();
         
         if(mostrarDetalles) {
@@ -41,24 +42,22 @@ public class Datos {
         }
     }
     
-    private void init(int[] cabeza) {
-        TOTAL_ATRIBUTOS = cabeza.length - 1;
+    private void init(String cabeza) {
+        cabecera = Stream.of(cabeza.split(",")).mapToInt(Integer::parseInt).toArray();
+        TOTAL_ATRIBUTOS = cabecera.length - 1;
         tipoAtributos = new boolean[TOTAL_ATRIBUTOS];
-        cabecera = new int[TOTAL_ATRIBUTOS];
-        int valor;
+
         for(int i = 0; i < TOTAL_ATRIBUTOS; i++) {
-            valor = cabeza[i];
-            if(valor == 0) {
+            if(cabecera[i] == 0) {
                 tipoAtributos[i] = Constantes.NUMERICO;
                 totalNumericos++;
             }else {
                 tipoAtributos[i] = Constantes.NOMINAL;
                 totalNominales++;
             }
-            cabecera[i] = valor;
         }
         
-        totalClases = cabeza[TOTAL_ATRIBUTOS];
+        totalClases = cabecera[TOTAL_ATRIBUTOS];
     }
     
     private void initMatrizAV() {
@@ -67,14 +66,18 @@ public class Datos {
         
         matrizAV = new int[maximo][TOTAL_ATRIBUTOS]; 
         
-        for(int[] dato : datos) {
+        int valorAtributo;
+        for(String dato : datos) {
             for(int indexAtributo = 0; indexAtributo < TOTAL_ATRIBUTOS; indexAtributo++) {
-                matrizAV[dato[indexAtributo]][indexAtributo]++;
+                if(tipoAtributos[indexAtributo] == Constantes.NOMINAL) {
+                    valorAtributo = Integer.parseInt(dato.split(",")[indexAtributo]);
+                    matrizAV[valorAtributo][indexAtributo]++;
+                }
             }
         }
         
         /*for(int i = 0; i < maximo; i++) {
-            for(int j = 0; j < Constantes.TOTAL_ATRIBUTOS; j++) {
+            for(int j = 0; j < TOTAL_ATRIBUTOS; j++) {
                 System.out.print(matrizAV[i][j] + " ");
             }
             System.out.println();
@@ -88,22 +91,29 @@ public class Datos {
         matrizAVC = new HashMap[maximo][TOTAL_ATRIBUTOS];    
         
         for(int j = 0; j < TOTAL_ATRIBUTOS; j++) {
-            for(int i = 0; i < cabecera[j]; i++) {
-                matrizAVC[i][j] = new HashMap<>();
-                for(int clase = 0; clase < totalClases; clase++) {
-                    matrizAVC[i][j].put(clase, 0);
-                }
+            if(tipoAtributos[j] == Constantes.NOMINAL) {
+                for(int i = 0; i < cabecera[j]; i++) {
+                    matrizAVC[i][j] = new HashMap<>();
+                    for(int clase = 0; clase < totalClases; clase++) {
+                        matrizAVC[i][j].put(clase, 0);
+                    }    
+                }    
             }
         }
         
         int aux;
-        for(int[] dato : datos) {
+        int valorAtributo;
+        for(String dato : datos) {
+            //System.out.println("Sacando datos de instancia " + dato);
             for(int indexAtributo = 0; indexAtributo < TOTAL_ATRIBUTOS; indexAtributo++) {
-                if(tipoAtributos[indexAtributo] != Constantes.NUMERICO) {
+                if(tipoAtributos[indexAtributo] == Constantes.NOMINAL) {
                     for(int clase = 0; clase < totalClases; clase++) {
-                        if(clase == dato[TOTAL_ATRIBUTOS]) {
-                            aux =  matrizAVC[dato[indexAtributo]][indexAtributo].get(clase) + 1;
-                            matrizAVC[dato[indexAtributo]][indexAtributo].put(clase, aux);
+                        if(clase == Integer.parseInt(dato.split(",")[TOTAL_ATRIBUTOS])) {
+                            valorAtributo = Integer.parseInt(dato.split(",")[indexAtributo]);
+                            //System.out.println(valorAtributo + " " + indexAtributo + " " + clase);
+                            //System.out.println(matrizAVC[valorAtributo][indexAtributo]);
+                            aux =  matrizAVC[valorAtributo][indexAtributo].get(clase) + 1;
+                            matrizAVC[valorAtributo][indexAtributo].put(clase, aux);
                         }
                     }    
                 }
@@ -124,7 +134,7 @@ public class Datos {
     
     private void initDesviaciones() {
         desvNumericos = new HashMap<>();
-        int[] valores;
+        double[] valores;
         double desv;
         for(int i = 0; i < TOTAL_ATRIBUTOS; i++) {
             if(tipoAtributos[i] == Constantes.NUMERICO) {
@@ -163,12 +173,17 @@ public class Datos {
             }
         }
         System.out.println();
+        System.out.println("INSTANCIAS");
+        for(String dato : datos) {
+            System.out.println(dato);
+        }
     }
     
-    public int[] getValores(int indexAtributo) {
-        int[] valores = new int[TOTAL_INSTANCIAS];
+    public double[] getValores(int indexAtributo) {
+        double[] valores = new double[TOTAL_INSTANCIAS];
+
         for(int i = 0; i < TOTAL_INSTANCIAS; i++) {
-            valores[i] = datos.get(i)[indexAtributo];
+            valores[i] = Double.parseDouble(datos.get(i).split(",")[indexAtributo]);
         }
         return valores;
     }
@@ -185,7 +200,7 @@ public class Datos {
         return desvNumericos.get(indexAtributo);
     }
     
-    public int[] getInstancia(int index) {
+    public String getInstancia(int index) {
         return datos.get(index);
     }
     

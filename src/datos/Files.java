@@ -12,16 +12,16 @@ import java.util.ArrayList;
 import java.util.stream.Stream;
 
 public class Files {
-    public static ArrayList<int[]> leerDatos(String nombreArchivo) {
+    public static ArrayList<String> leerDatos(String nombreArchivo) {
         try {
             FileInputStream fi = new FileInputStream(nombreArchivo);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fi, "utf-8"));
-            ArrayList<int[]> datos = new ArrayList<>();
+            ArrayList<String> datos = new ArrayList<>();
             String dato;
             while((dato = bufferedReader.readLine()) != null) {
                 if(dato.contains(",")) {
-                    int[] parsedDato = Stream.of(dato.split(",")).mapToInt(Integer::parseInt).toArray(); 
-                    datos.add(parsedDato);
+                    //int[] parsedDato = Stream.of(dato.split(",")).mapToInt(Integer::parseInt).toArray(); 
+                    datos.add(dato);
                 }
             }
             bufferedReader.close();
@@ -30,7 +30,7 @@ public class Files {
         return null;
     }
     
-    public static void crearARFF(ArrayList<int[]> datos, String cabecera, String nombre) {
+    public static void crearARFF(ArrayList<String> datos, String cabecera, String nombre) {
          try {
             FileOutputStream fo = new FileOutputStream(Constantes.PATH + nombre);
             BufferedWriter bf = new BufferedWriter(new OutputStreamWriter(fo, "utf-8"));
@@ -38,14 +38,8 @@ public class Files {
             bf.append(Constantes.REL + " " + nombre.substring(0, nombre.length() - 5) + "\n\n");
             
             bf.append(cabecera);
-            for(int[] dato : datos) {
-                for(int i = 0; i < dato.length; i++) {
-                    if(i != dato.length - 1) {
-                        bf.append(dato[i] + ",");
-                    }else {
-                        bf.append(dato[i] + "\n");
-                    }
-                }
+            for(String dato : datos) {
+                bf.append(dato + "\n");
             }            
             bf.close();
         } catch (IOException err) {err.printStackTrace();}       
@@ -53,7 +47,7 @@ public class Files {
     
     public static String initCabeceraARFF(boolean[] tipoAtributos, int[] cabecera, int totalClases, String nombre) {
         String cabeza = "";
-        for(int indexAtributo = 0; indexAtributo < cabecera.length; indexAtributo++) {
+        for(int indexAtributo = 0; indexAtributo < cabecera.length - 1; indexAtributo++) {
             if(tipoAtributos[indexAtributo] == Constantes.NOMINAL) {
                 cabeza += Constantes.ATT + " " + indexAtributo + " {";
                 for(int valorAtributo = 0; valorAtributo < cabecera[indexAtributo]; valorAtributo++) {

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Funciones {
-    public static double desvEstandar(int[] muestra) {
+    public static double desvEstandar(double[] muestra) {
         double numerador = 0;
         double media = mediaAritmetica(muestra);
         
@@ -15,7 +15,7 @@ public class Funciones {
         return Math.sqrt(numerador / (muestra.length - 1));
     }
     
-    public static double mediaAritmetica(int[] muestra) {
+    public static double mediaAritmetica(double[] muestra) {
         double suma = 0;
         for(double dato : muestra) {
             suma += dato;

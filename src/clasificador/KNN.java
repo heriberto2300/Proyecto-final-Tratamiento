@@ -11,13 +11,13 @@ public class KNN implements Runnable{
     private final int TOTAL_ATRIBUTOS;
     
     private final Datos datos;
-    private final ArrayList<int[]> prueba;
+    private final ArrayList<String> prueba;
     
     private final int k;
     
     private final boolean detalles;
     
-    public KNN(Datos datos, ArrayList<int[]> prueba, int k, boolean detalles) {
+    public KNN(Datos datos, ArrayList<String> prueba, int k, boolean detalles) {
         this.datos = datos;
         this.TOTAL_INSTANCIAS =  datos.getTotalInstancias();
         this.TOTAL_INSTANCIAS_PRUEBA = prueba.size() - 1;
@@ -35,14 +35,15 @@ public class KNN implements Runnable{
         int i = 0;
         int[][] datosMatriz = new int[TOTAL_INSTANCIAS_PRUEBA][2];
         int indexClase = TOTAL_ATRIBUTOS;
+        int claseInstancia;
         System.out.println("------------INICIANDO CLASIFICADOR KNN----------\n");
 
-        for(int[] instancia : prueba) {
+        for(String instancia : prueba) {
             int[] clases = getCercanos(instancia);
             int clase = Funciones.moda(clases);
 
             if(detalles) {
-                System.out.println("Clasificando: " + Arrays.toString(instancia));
+                System.out.println("Clasificando: " + instancia);
                 System.out.println("Clases mas cercanas ");
                 for(int c : clases) {
                     System.out.println(c);
@@ -51,13 +52,14 @@ public class KNN implements Runnable{
 
             }
             
-            if(clase == instancia[indexClase]) {
+            claseInstancia = Integer.parseInt(instancia.split(",")[indexClase]);
+            if(clase == claseInstancia) {
                 correctos++;
             }else {
                 incorrectos++;
             }
             
-            datosMatriz[i][0] = instancia[indexClase]; //clase real
+            datosMatriz[i][0] = claseInstancia; //clase real
             datosMatriz[i][1] = clase; //clase asignada;
             i++;
         }
@@ -68,13 +70,22 @@ public class KNN implements Runnable{
 
     }
     
-    public double hvdm(int[] instanciaA, int[] instanciaB) {
+    public double hvdm(String instanciaA, String instanciaB) {
+        String[] insA = instanciaA.split(",");
+        String[] insB = instanciaB.split(",");
         double resultado = 0.0;
+        double valorAtributoANum, valorAtributoBNum;
+        int valorAtributoANom, valorAtributoBNom;
+        
         for(int indexAtributo = 0; indexAtributo < TOTAL_ATRIBUTOS; indexAtributo++) {
             if(datos.getTipoAtributo(indexAtributo) == Constantes.NOMINAL) {
-                resultado += Math.pow(normalizedVdm(instanciaA[indexAtributo], instanciaB[indexAtributo], indexAtributo), 2);
+                valorAtributoANom = Integer.parseInt(insA[indexAtributo]);
+                valorAtributoBNom = Integer.parseInt(insB[indexAtributo]);
+                resultado += Math.pow(normalizedVdm(valorAtributoANom, valorAtributoBNom, indexAtributo), 2);
             }else {
-                resultado += Math.pow(normalizedDiff(instanciaA[indexAtributo], instanciaB[indexAtributo], indexAtributo), 2);
+                valorAtributoANum = Double.parseDouble(insA[indexAtributo]);
+                valorAtributoBNum = Double.parseDouble(insB[indexAtributo]);
+                resultado += Math.pow(normalizedDiff(valorAtributoANum, valorAtributoBNum, indexAtributo), 2);
             }
         }
         return Math.sqrt(resultado);
@@ -93,17 +104,17 @@ public class KNN implements Runnable{
         return resultado;
     }
     
-    public double normalizedDiff(int valorAtributoA, int valorAtributoB, int indexAtributo) {
-        return Math.abs((double)valorAtributoA - (double)valorAtributoB) / 4 * datos.getDesv(indexAtributo);
+    public double normalizedDiff(double valorAtributoA, double valorAtributoB, int indexAtributo) {
+        return Math.abs(valorAtributoA - valorAtributoB) / 4 * datos.getDesv(indexAtributo);
     }
     
-    public int[] getCercanos(int[] instancia) {
+    public int[] getCercanos(String instancia) {
         int[] cercanos = new int[k];
-        
         double[][] distancias = new double[TOTAL_INSTANCIAS][2];
+        int indexClase = TOTAL_ATRIBUTOS;
         
         for(int i = 0; i < TOTAL_INSTANCIAS; i++) {
-            distancias[i][0] = datos.getInstancia(i)[TOTAL_ATRIBUTOS];
+            distancias[i][0] = Double.parseDouble(datos.getInstancia(i).split(",")[indexClase]);
             distancias[i][1] = hvdm(instancia, datos.getInstancia(i));
             //System.out.println("Evaluando con " + Arrays.toString(datos.getInstancia(i)) + " con distancia " + distancias[i][1]);
 
