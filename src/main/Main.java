@@ -38,7 +38,7 @@ public class Main {
             
             System.out.println(kVecinos.hvdm(a, b));*/
             
-            threadKNN.start();
+           // threadKNN.start();
             
             threadKNN.join();
             

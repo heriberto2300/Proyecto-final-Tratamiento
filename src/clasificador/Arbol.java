@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
+import weka.core.Utils;
 import weka.core.converters.ConverterUtils.DataSource;
 
 
@@ -32,7 +33,7 @@ public class Arbol implements Runnable {
     public void run() {
         try {
             System.out.println("\n----------INICIANDO CLASIFICADOR C4.5---------\n");
-
+            arbol.setUnpruned(false);
             arbol.buildClassifier(entrenamiento);
             
             Evaluation evaluacion = new Evaluation(entrenamiento);

@@ -3,13 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
             <file>file:/home/heriberto/NetBeansProjects/Proyecto-final-Tratamiento/src/datos/Datos.java</file>
+            <file>file:/home/heriberto/NetBeansProjects/Proyecto-final-Tratamiento/src/clasificador/KNN.java</file>
             <file>file:/home/heriberto/NetBeansProjects/Proyecto-final-Tratamiento/src/main/Main.java</file>
-=======
-            <file>file:/C:/Users/Beto/Documents/NetBeansProjects/Proyecto-final-Tratamiento/src/main/Main.java</file>
-            <file>file:/C:/Users/Beto/Documents/NetBeansProjects/Proyecto-final-Tratamiento/src/graphics/VisualizadorArbol.java</file>
->>>>>>> 9621b892c15928d14b6a2084389cd6a6e832e1c1
+            <file>file:/home/heriberto/NetBeansProjects/Proyecto-final-Tratamiento/src/clasificador/Arbol.java</file>
+            <file>file:/home/heriberto/NetBeansProjects/Proyecto-final-Tratamiento/src/datos/Files.java</file>
         </group>
     </open-files>
 </project-private>
