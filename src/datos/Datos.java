@@ -34,7 +34,7 @@ public class Datos {
         this.datos = datos;
         TOTAL_INSTANCIAS = datos.size();
         initMatrizAV();
-        //initMatrizAVC();
+        initMatrizAVC();
         initDesviaciones();
         
         if(mostrarDetalles) {

@@ -81,7 +81,16 @@ public class KNN implements Runnable{
             if(datos.getTipoAtributo(indexAtributo) == Constantes.NOMINAL) {
                 valorAtributoANom = Integer.parseInt(insA[indexAtributo]);
                 valorAtributoBNom = Integer.parseInt(insB[indexAtributo]);
-                resultado += Math.pow(normalizedVdm(valorAtributoANom, valorAtributoBNom, indexAtributo), 2);
+                try {
+                    resultado += Math.pow(normalizedVdm(valorAtributoANom, valorAtributoBNom, indexAtributo), 2);
+                }catch(NullPointerException | ArrayIndexOutOfBoundsException err) {
+                    System.out.println("Fallo en instancia A de prueba: " + instanciaA);
+                    System.out.println("Fallo en instancia B Entrenamiento: " + instanciaB);
+                    System.out.println("indices A : indexAtributo = " + indexAtributo + ", valor = " + valorAtributoANom);
+                    System.out.println("indices A : indexAtributo = " + indexAtributo + ", valor = " + valorAtributoBNom);
+                    err.printStackTrace();
+                    System.exit(0);
+                }
             }else {
                 valorAtributoANum = Double.parseDouble(insA[indexAtributo]);
                 valorAtributoBNum = Double.parseDouble(insB[indexAtributo]);
@@ -94,6 +103,7 @@ public class KNN implements Runnable{
     public double normalizedVdm(int valorAtributoA, int valorAtributoB, int indexAtributo) {
         double resultado = 0.0;
         double numA, numB, denA, denB;
+
         for(int clase = 0; clase < datos.getTotalClases(); clase++) {
             numA = (double)datos.NaxC(indexAtributo, valorAtributoA, clase);
             numB = (double)datos.NaxC(indexAtributo, valorAtributoB, clase);
@@ -108,14 +118,14 @@ public class KNN implements Runnable{
         return Math.abs(valorAtributoA - valorAtributoB) / 4 * datos.getDesv(indexAtributo);
     }
     
-    public int[] getCercanos(String instancia) {
+    public int[] getCercanos(String instanciaPrueba) {
         int[] cercanos = new int[k];
         double[][] distancias = new double[TOTAL_INSTANCIAS][2];
         int indexClase = TOTAL_ATRIBUTOS;
         
         for(int i = 0; i < TOTAL_INSTANCIAS; i++) {
             distancias[i][0] = Double.parseDouble(datos.getInstancia(i).split(",")[indexClase]);
-            distancias[i][1] = hvdm(instancia, datos.getInstancia(i));
+            distancias[i][1] = hvdm(instanciaPrueba, datos.getInstancia(i));
             //System.out.println("Evaluando con " + Arrays.toString(datos.getInstancia(i)) + " con distancia " + distancias[i][1]);
 
         }

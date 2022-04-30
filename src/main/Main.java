@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 
 public class Main {
+    
     public static void main(String[] args) {
         try {
             Scanner x = new Scanner(System.in);
@@ -22,13 +23,13 @@ public class Main {
             String t2 = "aust1-T.txt";
             String p2 = "aust1-P.txt";
             
-            ArrayList<String> entrenamiento = Files.leerDatos("datos-Sb/aust1-T.txt");
-            ArrayList<String> prueba = Files.leerDatos("datos-Sb/aust1-P.txt");
+            ArrayList<String> entrenamiento = Files.leerDatos("datos-Sb/sb1-T.txt");
+            ArrayList<String> prueba = Files.leerDatos("datos-Sb/sb1-P.txt");
             
             Datos datos = new Datos(entrenamiento, false);
             
             /*Clasficador KNN*/
-            KNN kVecinos = new KNN(datos, prueba, 5, true);
+            KNN kVecinos = new KNN(datos, prueba, 9, true);
             
             Thread threadKNN = new Thread(kVecinos);
             
@@ -37,7 +38,7 @@ public class Main {
             
             System.out.println(kVecinos.hvdm(a, b));*/
             
-            //threadKNN.start();
+            threadKNN.start();
             
             threadKNN.join();
             
