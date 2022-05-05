@@ -9,7 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.stream.Stream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Files {
     public static ArrayList<String> leerDatos(String nombreArchivo) {
@@ -32,7 +33,7 @@ public class Files {
     
     public static void crearARFF(ArrayList<String> datos, String cabecera, String nombre) {
          try {
-            FileOutputStream fo = new FileOutputStream(Constantes.PATH + nombre);
+            FileOutputStream fo = new FileOutputStream(nombre.substring(0, nombre.length() - 5) + ".arff");
             BufferedWriter bf = new BufferedWriter(new OutputStreamWriter(fo, "utf-8"));
             
             bf.append(Constantes.REL + " " + nombre.substring(0, nombre.length() - 5) + "\n\n");
@@ -45,7 +46,7 @@ public class Files {
         } catch (IOException err) {err.printStackTrace();}       
     }
     
-    public static String initCabeceraARFF(boolean[] tipoAtributos, int[] cabecera, int totalClases, String nombre) {
+    public static String initCabeceraARFF(boolean[] tipoAtributos, int[] cabecera, int totalClases) {
         String cabeza = "";
         for(int indexAtributo = 0; indexAtributo < cabecera.length - 1; indexAtributo++) {
             if(tipoAtributos[indexAtributo] == Constantes.NOMINAL) {
@@ -74,5 +75,36 @@ public class Files {
         cabeza += Constantes.DATA + "\n";
 
         return cabeza;
+    }
+    
+    public static void filtrar(ArrayList<String> datos, int[] atributos, int[] cabecera, String nombre) {
+        try {
+            FileOutputStream fo = new FileOutputStream(nombre);
+            BufferedWriter bf = new BufferedWriter(new OutputStreamWriter(fo, "utf-8"));
+            
+            bf.append(datos.size() + "\n");
+            bf.append(atributos.length + "\n");
+            
+            for(int i = 0; i < atributos.length; i++) {
+                bf.append(cabecera[atributos[i]] + ",");
+                if(i == atributos.length - 1){
+                        bf.append(cabecera[cabecera.length - 1] + "\n");
+                }
+            }
+            
+            String[] datoSplit;
+            for(String dato : datos) {
+                datoSplit = dato.split(",");
+                for(int i = 0; i < atributos.length; i++) {
+                    bf.append(datoSplit[atributos[i]] + ",");
+                    if(i == atributos.length - 1){
+                        bf.append(datoSplit[datoSplit.length - 1] + "\n");
+                    }
+                }
+            }
+            bf.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Files.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -3,9 +3,12 @@ package graphics;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import weka.classifiers.trees.J48;
 import weka.gui.treevisualizer.PlaceNode2;
 import weka.gui.treevisualizer.TreeVisualizer;
@@ -15,16 +18,19 @@ public class VisualizadorArbol extends JFrame {
     
     private TreeVisualizer tv;
     
-    public VisualizadorArbol(J48 arbol) {
+    private int[] mejoresAtributos;
+    
+    public VisualizadorArbol(J48 arbol, boolean inputAtributos) {
         super("Arbol generado");
         try {
             init(arbol);
             setLocationRelativeTo(null);
             setVisible(true);
             tv.fitToScreen();
-        } catch (Exception ex) {
-            Logger.getLogger(VisualizadorArbol.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            if(inputAtributos) {
+                setMejoresAtributos();
+            }
+        } catch (Exception ex) {}
     }
     
     private void init(J48 arbol) throws Exception {
@@ -38,5 +44,20 @@ public class VisualizadorArbol extends JFrame {
                 dispose();
             }
         });
+    }
+    
+    private void setMejoresAtributos() {
+        String datos = "";
+        
+        while(datos.equals("")) {
+            datos = JOptionPane.showInputDialog("Escriba los mejores atributos");
+        }
+        
+        mejoresAtributos = Stream.of(datos.split(",")).mapToInt(Integer::parseInt).toArray();
+        dispose();
+    }
+    
+    public int[] getMejoresAtributos() {
+        return mejoresAtributos;  
     }
 }

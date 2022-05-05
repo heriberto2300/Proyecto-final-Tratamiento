@@ -1,12 +1,9 @@
 package clasificador;
 
 import graphics.VisualizadorArbol;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
-import weka.core.Utils;
 import weka.core.converters.ConverterUtils.DataSource;
 
 
@@ -14,25 +11,28 @@ public class Arbol implements Runnable {
     private Instances entrenamiento;
     private Instances prueba;
     private J48 arbol;
+    private VisualizadorArbol vA;
+    
+    private int[] mejoresAtributos;
+    
+    private boolean inputAtributos;
     
     public Arbol(String nombreT, String nombreP) {
         try {
-            DataSource source = new DataSource(Constantes.PATH + nombreT);
+            DataSource source = new DataSource(nombreT);
             this.entrenamiento = source.getDataSet();
             entrenamiento.setClassIndex(entrenamiento.numAttributes() - 1);
-            DataSource source2 = new DataSource(Constantes.PATH + nombreP);
+            DataSource source2 = new DataSource(nombreP);
             this.prueba = source2.getDataSet();
             prueba.setClassIndex(prueba.numAttributes() - 1);
             this.arbol = new J48();
-        } catch (Exception ex) {
-            Logger.getLogger(Arbol.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            this.inputAtributos = true;
+        } catch (Exception ex) {}
     }
     
     @Override
     public void run() {
         try {
-            System.out.println("\n----------INICIANDO CLASIFICADOR C4.5---------\n");
             arbol.setUnpruned(false);
             arbol.buildClassifier(entrenamiento);
             
@@ -52,9 +52,16 @@ public class Arbol implements Runnable {
                 System.out.println();
             }
             
-            new VisualizadorArbol(arbol);
-        } catch (Exception ex) {
-            Logger.getLogger(Arbol.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            vA = new VisualizadorArbol(arbol, inputAtributos);
+            mejoresAtributos = vA.getMejoresAtributos();
+        } catch (Exception ex) {}
+    }
+    
+    public int[] getMejoresAtributos() {
+        return mejoresAtributos;
+    }
+    
+    public void showInput(boolean inputAtributos) {
+        this.inputAtributos = inputAtributos;
     }
 }

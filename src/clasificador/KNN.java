@@ -36,7 +36,6 @@ public class KNN implements Runnable{
         int[][] datosMatriz = new int[TOTAL_INSTANCIAS_PRUEBA][2];
         int indexClase = TOTAL_ATRIBUTOS;
         int claseInstancia;
-        System.out.println("------------INICIANDO CLASIFICADOR KNN----------\n");
 
         for(String instancia : prueba) {
             int[] clases = getCercanos(instancia);
@@ -48,8 +47,7 @@ public class KNN implements Runnable{
                 for(int c : clases) {
                     System.out.println(c);
                 }
-                System.out.println("Clase asignada a instancia: " + clase); //Validar si es moda o media    
-
+                System.out.println("Clase asignada a instancia: " + clase); 
             }
             
             claseInstancia = Integer.parseInt(instancia.split(",")[indexClase]);
@@ -66,8 +64,6 @@ public class KNN implements Runnable{
         
         evaluar(correctos, incorrectos, datosMatriz);
         
-        System.out.println("\n------------CLASIFICADOR KNN FINALIZADO----------\n");
-
     }
     
     public double hvdm(String instanciaA, String instanciaB) {
@@ -126,8 +122,6 @@ public class KNN implements Runnable{
         for(int i = 0; i < TOTAL_INSTANCIAS; i++) {
             distancias[i][0] = Double.parseDouble(datos.getInstancia(i).split(",")[indexClase]);
             distancias[i][1] = hvdm(instanciaPrueba, datos.getInstancia(i));
-            //System.out.println("Evaluando con " + Arrays.toString(datos.getInstancia(i)) + " con distancia " + distancias[i][1]);
-
         }
         
         double tempClase, tempDistancia;
@@ -149,20 +143,20 @@ public class KNN implements Runnable{
         for(int i = 0; i < k; i++) {
             cercanos[i] = (int)distancias[i][0];
         }
-        
+
         return cercanos;
     }
     
     public void evaluar(int correctos, int incorrectos, int[][] datosMatriz) {
-        System.out.println("\n------RESULTADOS------\n");
+        System.out.println("\n------RESULTADOS, K = " + k +"------\n");
         System.out.println("INSTANCIAS CORRECTAMENTE CLASIFICADAS " + correctos);
         System.out.println("INSTANCIAS INCORRECTAMENTE CLASIFICADAS " + incorrectos);
         double yes = (double)correctos * 100 / TOTAL_INSTANCIAS_PRUEBA;
         double no = (double)incorrectos * 100 / TOTAL_INSTANCIAS_PRUEBA;
-        System.out.println("PORCENTAJE DE EXACTITUD = " + yes);
-        System.out.println("PORCENTAJE DE ERROR = " + no);
+        System.out.println("PORCENTAJE DE EXACTITUD = " + yes + "%");
+        System.out.println("PORCENTAJE DE ERROR = " + no + "%");
         double total = no + yes;
-        System.out.println("PORCENTAJE TOTAL = " + total);
+        System.out.println("PORCENTAJE TOTAL = " + total + "%");
         
         Matriz confusion = new Matriz(datos.getTotalClases(), datosMatriz);
         System.out.println("\n------MATRIZ DE CONFUSION:------\n");

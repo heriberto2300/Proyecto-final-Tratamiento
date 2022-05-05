@@ -5,79 +5,80 @@ import clasificador.KNN;
 import datos.Datos;
 import datos.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 
 public class Main {
+    public static boolean filtrar = true;
+    public static String filtradoT;
+    public static String filtradoP;
+    public static Scanner x;
     
     public static void main(String[] args) {
+        x = new Scanner(System.in);
+        
+        /*RECUPERACION DE ARGUMENTOS*/
+        int k = Integer.parseInt(args[0]);
+        String detallesDatos = args[1];
+        boolean detallesKNN = Boolean.parseBoolean(args[2]);
+        String rutaFolder = args[3] + "/";
+        String nombreT = args[4];
+        String nombreP = args[5];
+        
+        filtradoT = nombreT.replace(".txt", "-filtrado.txt");
+        filtradoP = nombreP.replace(".txt", "-filtrado.txt");
+        
         try {
-            Scanner x = new Scanner(System.in);
-            /*Recuperacion de datos y construccion del conjunto de entrenamiento*/
+            runProyecto(k, detallesDatos, detallesKNN, rutaFolder, nombreT, nombreP);
             
-            String t1 = "sb1-T.txt";
-            String p1 = "sb1-P.txt";
-            
-            String t2 = "aust1-T.txt";
-            String p2 = "aust1-P.txt";
-            
-            ArrayList<String> entrenamiento = Files.leerDatos("datos-Sb/sb1-T.txt");
-            ArrayList<String> prueba = Files.leerDatos("datos-Sb/sb1-P.txt");
-            
-            Datos datos = new Datos(entrenamiento, false);
-            
-            /*Clasficador KNN*/
-            KNN kVecinos = new KNN(datos, prueba, 9, true);
-            
-            Thread threadKNN = new Thread(kVecinos);
-            
-            /*int[] a = {3, 2, 1, 0, 2};
-            int[] b = {2, 1, 2, 1, 2};
-            
-            System.out.println(kVecinos.hvdm(a, b));*/
-            
-           // threadKNN.start();
-            
-            threadKNN.join();
-            
-            System.out.println("\nPresionar cualquier tecla para continuar...");
-            x.nextLine();
-            /*Conversion de datos a formato arff*/
-            
-            System.out.println("\n----------CONSTRUCCION DE DATOS EN FORMATO ARFF PARA WEKA---------\n");
-            
-            String nombreT = "sb1-T.arff";
-            String nombreP = "sb1-P.arff";
-            
-            String nombreT2 = "aust1-T.arff";
-            String nombreP2 = "aust1-P.arff";
-            
-            
-            String cabecera = Files.initCabeceraARFF(datos.getTipoAtributos(), datos.getCabecera(), datos.getTotalClases(), nombreT2);
-            Files.crearARFF(entrenamiento, cabecera, nombreT2);
-            Files.crearARFF(prueba, cabecera, nombreP2);
-            
-            System.out.println("\nFinalizado. Presionar cualquier tecla para continuar...");
-            x.nextLine();
-            
-            /*Clasificador C4.5*/
+            runProyecto(k, detallesDatos, detallesKNN, rutaFolder, filtradoT, filtradoP);
+        } catch (InterruptedException ex) {}
+        x.close();
+    }
+    
+    public static void runProyecto(int k, String detallesDatos, boolean detallesKNN, String ruta, String nombreT, String nombreP) throws InterruptedException {
 
-            Arbol arbol = new Arbol(nombreT2, nombreP2);
-            Thread threadArbol = new Thread(arbol);
-            
-            threadArbol.start();
-            
-            threadArbol.join();
-            
-            System.out.println("\nPresionar cualquier tecla para continuar...");
+        /*CONSTRUCCION DEL CONJUNTO DE DATOS*/
+        ArrayList<String> entrenamiento = Files.leerDatos(ruta + nombreT);
+        ArrayList<String> prueba = Files.leerDatos(ruta + nombreP);
+        Datos datos = new Datos(entrenamiento, detallesDatos);
+        
+        /*CLASIFICADOR KNN*/
+        KNN knn = new KNN(datos, prueba, k, detallesKNN); 
+        Thread threadKNN = new Thread(knn);
+        System.out.println("------------INICIANDO CLASIFICADOR KNN----------\n");
+        threadKNN.start();
+        threadKNN.join();
+        System.out.println("\n------------CLASIFICADOR KNN FINALIZADO----------\n");
+        x.nextLine();
+        
+        /*CONVERSION DE DATOS A .ARFF*/
+        System.out.println("\nCONVIRTIENDO DATOS A FORMATO .ARFF");
+        nombreT = nombreT.replace(".txt", ".arff");
+        nombreP = nombreP.replace(".txt", ".arff");
+        String cabecera = Files.initCabeceraARFF(datos.getTipoAtributos(), datos.getCabecera(), datos.getTotalClases());
+        Files.crearARFF(entrenamiento, cabecera, ruta + nombreT);
+        Files.crearARFF(prueba, cabecera, ruta + nombreP);
+        System.out.println("FINALIZADO\n");
+        x.nextLine();
+        
+        /*ARBOL DE DECISION C4.5*/
+        Arbol c45 = new Arbol(ruta + nombreT, ruta + nombreP);
+        c45.showInput(filtrar);
+        Thread threadC45 = new Thread(c45);
+        System.out.println("------------INICIANDO ARBOL DE DECISION----------\n");
+        threadC45.start();
+        threadC45.join();
+        System.out.println("\n------------CLASIFICADOR KNN FINALIZADO----------\n");
+        
+        if(filtrar) {
+            Files.filtrar(entrenamiento, c45.getMejoresAtributos(), datos.getCabecera(), ruta + filtradoT);
+            Files.filtrar(prueba, c45.getMejoresAtributos(), datos.getCabecera(), ruta + filtradoP);
+            filtrar = false;
+            System.out.println("DATOS FILTRADOS EN BASE A LOS ATRIBUTOS SELECCIONADOS");
+            System.out.println(Arrays.toString(c45.getMejoresAtributos()) + "\n");
             x.nextLine();
-            
-            x.close();
-            
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 }
