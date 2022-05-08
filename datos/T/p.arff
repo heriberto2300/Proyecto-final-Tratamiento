@@ -1,0 +1,9 @@
+@relation datos/T/p
+
+@attribute 0 numeric
+@attribute 1 {0, 1}
+@attribute 2 {0, 1}
+@attribute clase {0, 1}
+
+@data
+6500,0,1,0

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,6 +61,37 @@ public class Files {
                 }
             }else {
                 cabeza += Constantes.ATT + " " + indexAtributo + " " + Constantes.NUM + "\n";
+            }
+        }
+            
+        cabeza += Constantes.ATT + " clase {";
+        for(int clase = 0; clase < totalClases; clase++) {
+            if(clase != totalClases - 1) {
+                cabeza += clase + ", ";
+            }else {
+                cabeza += clase + "}\n\n";
+            }
+        }
+            
+        cabeza += Constantes.DATA + "\n";
+
+        return cabeza;
+    }
+    
+    public static String initCabeceraARFF(boolean[] tipoAtributos, int[] cabecera, int totalClases, int[] nombreAtributos) {
+        String cabeza = "";
+        for(int indexAtributo = 0; indexAtributo < cabecera.length - 1; indexAtributo++) {
+            if(tipoAtributos[indexAtributo] == Constantes.NOMINAL) {
+                cabeza += Constantes.ATT + " " + nombreAtributos[indexAtributo] + " {";
+                for(int valorAtributo = 0; valorAtributo < cabecera[indexAtributo]; valorAtributo++) {
+                    if(valorAtributo != cabecera[indexAtributo] - 1) {
+                        cabeza += valorAtributo + ", ";
+                    }else {
+                        cabeza += valorAtributo + "}\n";
+                    }
+                }
+            }else {
+                cabeza += Constantes.ATT + " " + nombreAtributos[indexAtributo] + " " + Constantes.NUM + "\n";
             }
         }
             

@@ -2,7 +2,7 @@ package clasificador;
 
 import datos.Datos;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Scanner;
 import math.Funciones;
 
 public class KNN implements Runnable{
@@ -50,6 +50,11 @@ public class KNN implements Runnable{
                 System.out.println("Clase asignada a instancia: " + clase); 
             }
             
+            /*if(!Funciones.hayRepetidos(clases)) {
+                clase = clases[0];
+                System.out.println("CORRECCION, CLASE ASIGNADA = " + clase);
+            }
+            */
             claseInstancia = Integer.parseInt(instancia.split(",")[indexClase]);
             if(clase == claseInstancia) {
                 correctos++;
@@ -99,7 +104,7 @@ public class KNN implements Runnable{
     public double normalizedVdm(int valorAtributoA, int valorAtributoB, int indexAtributo) {
         double resultado = 0.0;
         double numA, numB, denA, denB;
-
+        
         for(int clase = 0; clase < datos.getTotalClases(); clase++) {
             numA = (double)datos.NaxC(indexAtributo, valorAtributoA, clase);
             numB = (double)datos.NaxC(indexAtributo, valorAtributoB, clase);
@@ -107,11 +112,14 @@ public class KNN implements Runnable{
             denB = (double)datos.Nax(indexAtributo, valorAtributoB);
             resultado += Math.abs((numA / denA) - (numB / denB));
         }
+
         return resultado;
     }
     
     public double normalizedDiff(double valorAtributoA, double valorAtributoB, int indexAtributo) {
-        return Math.abs(valorAtributoA - valorAtributoB) / 4 * datos.getDesv(indexAtributo);
+        double numerador = Math.abs(valorAtributoA - valorAtributoB);
+        double denominador = 4 * datos.getDesv(indexAtributo);
+        return numerador / denominador;
     }
     
     public int[] getCercanos(String instanciaPrueba) {
@@ -139,24 +147,22 @@ public class KNN implements Runnable{
                 }
             }
         }
-        
+
         for(int i = 0; i < k; i++) {
             cercanos[i] = (int)distancias[i][0];
         }
-
+        
         return cercanos;
     }
     
     public void evaluar(int correctos, int incorrectos, int[][] datosMatriz) {
-        System.out.println("\n------RESULTADOS, K = " + k +"------\n");
-        System.out.println("INSTANCIAS CORRECTAMENTE CLASIFICADAS " + correctos);
-        System.out.println("INSTANCIAS INCORRECTAMENTE CLASIFICADAS " + incorrectos);
         double yes = (double)correctos * 100 / TOTAL_INSTANCIAS_PRUEBA;
         double no = (double)incorrectos * 100 / TOTAL_INSTANCIAS_PRUEBA;
-        System.out.println("PORCENTAJE DE EXACTITUD = " + yes + "%");
-        System.out.println("PORCENTAJE DE ERROR = " + no + "%");
+        System.out.println("\n------RESULTADOS, K = " + k +"------\n");
+        System.out.println("Instancias Correctamente Clasificadas:      " + correctos + "   " + yes + "%");
+        System.out.println("Instancias Incorrectamente Clasificadas:    " + incorrectos + "   " + no + "%");
         double total = no + yes;
-        System.out.println("PORCENTAJE TOTAL = " + total + "%");
+        System.out.println("Porcentaje Total = " + total + "%");
         
         Matriz confusion = new Matriz(datos.getTotalClases(), datosMatriz);
         System.out.println("\n------MATRIZ DE CONFUSION:------\n");

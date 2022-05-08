@@ -10,6 +10,4 @@ public class Constantes {
     public static final String DATA = "@data";
     public static final String NUM = "numeric";
     
-    public static final String PATH = "datos-Sb/";
-    
 }

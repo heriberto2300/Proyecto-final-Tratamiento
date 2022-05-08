@@ -1,2 +1,0 @@
-java -jar ProyectoFinalTratamiento.jar 3 false false datos/sb1 sb1-T.txt sb1-P.txt
-

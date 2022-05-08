@@ -14,6 +14,8 @@ public class Main {
     public static String filtradoP;
     public static Scanner x;
     
+    public static int[] mejoresAtributos;
+    
     public static void main(String[] args) {
         x = new Scanner(System.in);
         
@@ -28,6 +30,12 @@ public class Main {
         filtradoT = nombreT.replace(".txt", "-filtrado.txt");
         filtradoP = nombreP.replace(".txt", "-filtrado.txt");
         
+        /*ArrayList<String> entrenamiento = Files.leerDatos(rutaFolder + nombreT);
+        ArrayList<String> prueba = Files.leerDatos(rutaFolder + nombreP);
+        Datos datos = new Datos(entrenamiento, detallesDatos);
+        
+        KNN knn = new KNN(datos, prueba, k, detallesKNN);
+        System.out.println(knn.hvdm("6500,0,1,0", "13500,1,0,1"));*/
         try {
             runProyecto(k, detallesDatos, detallesKNN, rutaFolder, nombreT, nombreP);
             
@@ -56,7 +64,12 @@ public class Main {
         System.out.println("\nCONVIRTIENDO DATOS A FORMATO .ARFF");
         nombreT = nombreT.replace(".txt", ".arff");
         nombreP = nombreP.replace(".txt", ".arff");
-        String cabecera = Files.initCabeceraARFF(datos.getTipoAtributos(), datos.getCabecera(), datos.getTotalClases());
+        String cabecera;
+        if(!filtrar) {
+            cabecera = Files.initCabeceraARFF(datos.getTipoAtributos(), datos.getCabecera(), datos.getTotalClases(), mejoresAtributos);
+        }else {
+            cabecera = Files.initCabeceraARFF(datos.getTipoAtributos(), datos.getCabecera(), datos.getTotalClases());
+        }
         Files.crearARFF(entrenamiento, cabecera, ruta + nombreT);
         Files.crearARFF(prueba, cabecera, ruta + nombreP);
         System.out.println("FINALIZADO\n");
@@ -72,11 +85,12 @@ public class Main {
         System.out.println("\n------------CLASIFICADOR KNN FINALIZADO----------\n");
         
         if(filtrar) {
-            Files.filtrar(entrenamiento, c45.getMejoresAtributos(), datos.getCabecera(), ruta + filtradoT);
-            Files.filtrar(prueba, c45.getMejoresAtributos(), datos.getCabecera(), ruta + filtradoP);
+            mejoresAtributos = c45.getMejoresAtributos();
+            Files.filtrar(entrenamiento, mejoresAtributos, datos.getCabecera(), ruta + filtradoT);
+            Files.filtrar(prueba, mejoresAtributos, datos.getCabecera(), ruta + filtradoP);
             filtrar = false;
             System.out.println("DATOS FILTRADOS EN BASE A LOS ATRIBUTOS SELECCIONADOS");
-            System.out.println(Arrays.toString(c45.getMejoresAtributos()) + "\n");
+            System.out.println(Arrays.toString(mejoresAtributos) + "\n");
             x.nextLine();
         }
         

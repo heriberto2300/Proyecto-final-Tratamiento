@@ -1,0 +1,13 @@
+@relation datos/T/t-filtrado
+
+@attribute 2 {0, 1}
+@attribute clase {0, 1}
+
+@data
+0,1
+1,1
+0,0
+0,0
+0,0
+1,1
+1,0
