@@ -1,3 +1,10 @@
+/*Alonso Melendez Heriberto Abraham - 201846714
+    TRATAMIENTO DE LA INFORMACION
+           PROYECTO FINAL
+           Primavera 2022
+Docente: Arturo Olvera Lopez
+*/
+
 package main;
 
 import clasificador.Arbol;
