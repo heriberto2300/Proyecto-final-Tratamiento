@@ -30,12 +30,6 @@ public class Main {
         filtradoT = nombreT.replace(".txt", "-filtrado.txt");
         filtradoP = nombreP.replace(".txt", "-filtrado.txt");
         
-        /*ArrayList<String> entrenamiento = Files.leerDatos(rutaFolder + nombreT);
-        ArrayList<String> prueba = Files.leerDatos(rutaFolder + nombreP);
-        Datos datos = new Datos(entrenamiento, detallesDatos);
-        
-        KNN knn = new KNN(datos, prueba, k, detallesKNN);
-        System.out.println(knn.hvdm("6500,0,1,0", "13500,1,0,1"));*/
         try {
             runProyecto(k, detallesDatos, detallesKNN, rutaFolder, nombreT, nombreP);
             
@@ -76,13 +70,20 @@ public class Main {
         x.nextLine();
         
         /*ARBOL DE DECISION C4.5*/
+        if(!filtrar) {
+            System.out.print("Desea ejecutar C4.5? S/N: ");
+            String respuesta = x.nextLine();
+            if(respuesta.equals("N")) {
+                System.exit(0);
+            }
+        }
         Arbol c45 = new Arbol(ruta + nombreT, ruta + nombreP);
         c45.showInput(filtrar);
         Thread threadC45 = new Thread(c45);
         System.out.println("------------INICIANDO ARBOL DE DECISION----------\n");
         threadC45.start();
         threadC45.join();
-        System.out.println("\n------------CLASIFICADOR KNN FINALIZADO----------\n");
+        System.out.println("\n------------CLASIFICADOR C4.5 FINALIZADO----------\n");
         
         if(filtrar) {
             mejoresAtributos = c45.getMejoresAtributos();

@@ -53,7 +53,9 @@ public class Datos {
         cabecera = Stream.of(cabeza.split(",")).mapToInt(Integer::parseInt).toArray();
         TOTAL_ATRIBUTOS = cabecera.length - 1;
         tipoAtributos = new boolean[TOTAL_ATRIBUTOS];
-        maximo = Arrays.stream(cabecera).max().getAsInt();
+        
+        int[] aux = Arrays.copyOfRange(cabecera, 0, cabecera.length - 1);
+        maximo = Arrays.stream(aux).max().getAsInt();
         
         for(int i = 0; i < TOTAL_ATRIBUTOS; i++) {
             if(cabecera[i] == 0) {

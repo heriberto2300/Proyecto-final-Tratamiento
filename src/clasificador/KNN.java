@@ -50,11 +50,6 @@ public class KNN implements Runnable{
                 System.out.println("Clase asignada a instancia: " + clase); 
             }
             
-            /*if(!Funciones.hayRepetidos(clases)) {
-                clase = clases[0];
-                System.out.println("CORRECCION, CLASE ASIGNADA = " + clase);
-            }
-            */
             claseInstancia = Integer.parseInt(instancia.split(",")[indexClase]);
             if(clase == claseInstancia) {
                 correctos++;

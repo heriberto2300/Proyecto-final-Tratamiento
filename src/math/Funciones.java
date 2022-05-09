@@ -46,23 +46,4 @@ public class Funciones {
         return m;
     }
 
-    public static boolean hayRepetidos(int[] muestra) {
-                Map<Integer, Integer> moda = new HashMap<>();
-
-               for(int i = 0; i < muestra.length; i++) {
-            if(moda.containsKey(muestra[i])) {
-                moda.put(muestra[i], moda.get(muestra[i]) + 1);
-            }else {
-                moda.put(muestra[i], 1);
-            }
-        }
-        int total = 0;
-        int m = 0;
-        for(HashMap.Entry<Integer, Integer> dato : moda.entrySet()) {
-            if(dato.getValue() > 1) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
