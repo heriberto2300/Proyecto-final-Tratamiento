@@ -34,6 +34,7 @@ public class Arbol implements Runnable {
     public void run() {
         try {
             arbol.setUnpruned(false);
+            arbol.setReducedErrorPruning(true);
             arbol.buildClassifier(entrenamiento);
             
             Evaluation evaluacion = new Evaluation(entrenamiento);

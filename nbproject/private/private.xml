@@ -5,8 +5,8 @@
         <group>
             <file>file:/home/heriberto/NetBeansProjects/Proyecto-final-Tratamiento/src/datos/Datos.java</file>
             <file>file:/home/heriberto/NetBeansProjects/Proyecto-final-Tratamiento/src/math/Funciones.java</file>
-            <file>file:/home/heriberto/NetBeansProjects/Proyecto-final-Tratamiento/src/clasificador/KNN.java</file>
             <file>file:/home/heriberto/NetBeansProjects/Proyecto-final-Tratamiento/src/main/Main.java</file>
+            <file>file:/home/heriberto/NetBeansProjects/Proyecto-final-Tratamiento/src/clasificador/Arbol.java</file>
         </group>
     </open-files>
 </project-private>
